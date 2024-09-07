@@ -113,77 +113,43 @@ public class UserDao {
     }
 
     // 插入一条数据
-    public static void insertSomeDataWithTransaction() throws SQLException {
+    public static void insertSomeDataWithTransaction(Connection conn) throws SQLException {
         String sql = "INSERT INTO Users(username,password) VALUES(?,?)";
-        Connection conn = connection.getConnection();
         try {
-            conn.setAutoCommit(false); // 禁用自动提交
 
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, generateRandomUsername());
             stmt.setString(2, generateRandomPassword());
             stmt.executeUpdate();
-
-            conn.commit(); // 提交事务
-            System.out.println("Insert successfully!");
         } catch (SQLException e) {
             System.out.println("Insert error! " + e.getMessage());
-            // 发生异常时回滚事务
-            try {
-                conn.rollback();
-            } catch (SQLException rollbackEx) {
-                System.out.println("Rollback error! " + rollbackEx.getMessage());
-            }
         }
     }
 
     // 修改数据
-    public static void updateSomeDataWithTransaction(int id, String username, String password) throws SQLException {
+    public static void updateSomeDataWithTransaction(Connection conn,int id, String username, String password) throws SQLException {
         String sql = "UPDATE Users SET username=?, password=? WHERE id=?";
-        Connection conn = connection.getConnection();
         try {
-            conn.setAutoCommit(false); // 禁用自动提交
-
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, username);
             stmt.setString(2, password);
             stmt.setInt(3, id);
             stmt.executeUpdate();
-
-            conn.commit(); // 提交事务
-            System.out.println("Update successfully!");
         } catch (SQLException e) {
-            System.out.println("Update error! " + e.getMessage());
-            // 发生异常时回滚事务
-            try {
-                conn.rollback();
-            } catch (SQLException rollbackEx) {
-                System.out.println("Rollback error! " + rollbackEx.getMessage());
-            }
+            System.out.println("update error! " + e.getMessage());
         }
     }
 
     // 删除一条数据
-    public static void deleteSomeDataWithTransaction(int id) throws SQLException {
+    public static void deleteSomeDataWithTransaction(Connection conn,int id) throws SQLException {
         String sql = "DELETE FROM Users WHERE id=?";
-        Connection conn = connection.getConnection();
         try {
-            conn.setAutoCommit(false); // 禁用自动提交
 
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
             stmt.executeUpdate();
-
-            conn.commit(); // 提交事务
-            System.out.println("Delete successfully!");
         } catch (SQLException e) {
-            System.out.println("Delete error! " + e.getMessage());
-            // 发生异常时回滚事务
-            try {
-                conn.rollback();
-            } catch (SQLException rollbackEx) {
-                System.out.println("Rollback error! " + rollbackEx.getMessage());
-            }
+            System.out.println("delete error! " + e.getMessage());
         }
     }
 
